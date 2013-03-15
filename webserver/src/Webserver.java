@@ -6,7 +6,7 @@ public class Webserver {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		System.out.println("HELLOO");
+		System.out.println("HELLO");
 	}
 
 }

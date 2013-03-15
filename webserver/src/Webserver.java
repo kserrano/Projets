@@ -7,6 +7,8 @@ public class Webserver {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		System.out.println("HELLO");
+		TCPAcceptor TCPa = new TCPAcceptor();
+		TCPa.start();
 	}
 
 }

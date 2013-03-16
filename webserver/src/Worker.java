@@ -1,5 +1,7 @@
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.URISyntaxException;
 
 import lsr.concurrence.http.HttpRequest;
 import lsr.concurrence.http.HttpRequestStream;
@@ -12,19 +14,26 @@ public class Worker extends Thread{
 	HttpRequestStream rStream;
 	HttpResponse rep;
 	Socket socket;
-	StaticSite staticS;
 	public Worker(Socket sock) {
 		socket = sock;
 		// TODO Auto-generated constructor stub 
 		try {
+
+			StaticSite staticS = new StaticSite();
 			rStream = new HttpRequestStream(socket.getInputStream());
 			req = rStream.readRequest();
-			staticS = req.;
-			
+			rep = staticS.respondTo(req);
+			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+	        out.write(rep.toString());
+	        out.flush();
+						
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 	}
 	
 }

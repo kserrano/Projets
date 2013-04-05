@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -25,13 +26,15 @@ public class TCPAcceptor implements Runnable {
 		// TODO Auto-generated method stub
 		while(true){
 			Socket socket = null;
+			System.out.println("Nombre de boucle Socket = new socket");
 		try {
 			socket = serverSocket.accept();
 			InputStream is = socket.getInputStream();
+			OutputStream os = socket.getOutputStream();
 	        System.out.println("New connection accepted "
 		            + socket.getInetAddress() + ":" + socket.getPort());
-			HttpRequestStream httpRequStream = new HttpRequestStream(is);
-			Worker worker = new Worker(httpRequStream);
+
+			Worker worker = new Worker(is,os);
 			worker.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

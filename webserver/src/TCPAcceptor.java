@@ -36,6 +36,7 @@ public class TCPAcceptor implements Runnable {
 
 			Worker worker = new Worker(is,os);
 			worker.start();
+			worker.setAvailable(true);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

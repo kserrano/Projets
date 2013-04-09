@@ -16,9 +16,15 @@ import lsr.concurrence.webserver.StaticSite;
 public class Worker extends Thread{
 	InputStream is;
 	OutputStream os;
+	Boolean available = true;
+	
+	public void setAvailable(boolean a) {
+		this.available = a;
+	}
 
 	public Worker(InputStream is, OutputStream os) {
 		super();
+		available = false;
 		this.is=is;
 		this.os = os;
 
@@ -56,7 +62,6 @@ public class Worker extends Thread{
 			e.printStackTrace();
 		}
 		
-
 	}
 	
 //	HttpRequest req;

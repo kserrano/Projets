@@ -7,7 +7,7 @@ import java.net.Socket;
 
 
 
-public class TCPAcceptor implements Runnable {
+public class TCPAcceptor extends Thread {
 
 	private ServerSocket serverSocket;
 	private BufferOfTasks buffer;
@@ -22,25 +22,25 @@ public class TCPAcceptor implements Runnable {
 
 
 	@Override
-	public void run() {
+	public void start() {
 		// TODO Auto-generated method stub
 		
-		
+		System.out.println("TCPa started");
 		while(true){
+			
 			Socket socket = null;
 			System.out.println("Nombre de boucle Socket = new socket");
 		try {
 			socket = serverSocket.accept();
-			//InputStream is = socket.getInputStream();
-			//OutputStream os = socket.getOutputStream();  // ces flux seront utiliser par les workers lorsqu'ils liront le socket dans le buffer
+			
 	        System.out.println("New connection accepted "
 		            + socket.getInetAddress() + ":" + socket.getPort());
 	        //Put the task into the buffer
 	        Task task = new Task(socket);
 	        buffer.putIntoBuffer(task);
-//	        Worker worker = new Worker(buffer);
-//	        Thread thread = new Thread(worker);
-//			thread.start();
+	        System.out.println("Put task into buffer");
+	       // System.out.println("buffer full?"+buffer.isFull());
+
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -50,8 +50,7 @@ public class TCPAcceptor implements Runnable {
 		}
 	}
 	
-	// The TCPAcceptor thread waits	for TCP connections from browsers
-	
+
 	
 
 }

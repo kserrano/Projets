@@ -7,13 +7,16 @@ public class BufferOfTasks {
 	private final int bufferSize;
 	private final Semaphore availableSpaces;
 	private final Semaphore availableItems;
+	private final Semaphore mutex;
 	private int putPosition =0;
 	private int getPosition = 0;
+	private int nbItemIntoBuffer = 0;
 	private Task[] tasks;
 	public BufferOfTasks(int bufferSize){
 		this.bufferSize = bufferSize;
 		 availableItems = new Semaphore(0,true);
 		 availableSpaces = new Semaphore(bufferSize,true);
+		mutex = new Semaphore(1,true);
 		 tasks = new Task[bufferSize];
 	}
 	
@@ -36,10 +39,21 @@ public class BufferOfTasks {
 	}
 	// rendre ces deux methodes blocantes (semaphores)
 	public void putIntoBuffer(Task t){
+		System.out.println("Start deposit");
 		try {
 			availableSpaces.acquire();
-			insert(t);
+//			mutex.acquire();
+			//insert(t);
+			tasks[putPosition]=t;
+			putPosition = (putPosition+1)% bufferSize;
+			mutex.acquire();
+			nbItemIntoBuffer++;
+			mutex.release();
+			//tasks[putPosition] = t;
+			//putPosition = putPosition+1;
 			availableItems.release();
+//			mutex.release();
+			System.out.println("End deposit");
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -49,10 +63,19 @@ public class BufferOfTasks {
 	
 	public Task readTask(){
 		Task t=null;
+		System.out.println("begin readTask");
 		try {
 			availableItems.acquire();
-			t = getNextTask();
+//			mutex.acquire();
+//			t = getNextTask();
+//			mutex.release();
+			t = tasks[getPosition];
+			getPosition = (getPosition+1)% bufferSize;
+			mutex.acquire();
+			nbItemIntoBuffer--;
+			mutex.release();
 			availableSpaces.release();
+			System.out.println("end readTask");
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -60,24 +83,5 @@ public class BufferOfTasks {
 		return t;
 	}
 	
-	public void insert(Task t){
-		tasks[putPosition] = t;
-		if(putPosition+1 == tasks.length){
-			putPosition = 0;   // ici il faut bloquer sinon il efface les vieilles tache
-		}else{
-			putPosition = putPosition++;
-		}
-	}
-
-	public Task getNextTask(){
-		Task t = tasks[getPosition];
-		tasks[getPosition]=null;
-		if(getPosition+1 == tasks.length){
-			getPosition = 0;
-		}else{
-			getPosition = getPosition++;
-		}
-		return t;
-	}
 
 }

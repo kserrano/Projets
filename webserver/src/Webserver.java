@@ -10,7 +10,7 @@ public class Webserver {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		int port = 8080;
-		final int BUFFER_SIZE = 5;
+		final int BUFFER_SIZE = 2;
 		final int WORKER_SIZE = 5;
 		ServerSocket serverSocket = null;
 		try {
@@ -23,14 +23,16 @@ public class Webserver {
 		//Creat buffer of size N
 		BufferOfTasks buffer = new BufferOfTasks(BUFFER_SIZE);
 		//Creat M workers
+		Worker[] workers = new Worker[WORKER_SIZE];
 		for(int i = 0; i<WORKER_SIZE;i++){
-			Worker worker = new Worker(buffer);
-			System.out.println("Worker created");
-			worker.run();
+			Thread t = new Thread(new Worker(buffer));
+			System.out.println("Worker "+ (i+1) +" created");
+			t.start();
+			System.out.println("Worker "+(i+1)+" running");
 		}
 		
 		TCPAcceptor TCPa = new TCPAcceptor(serverSocket,buffer);
-		TCPa.run();
+		TCPa.start();
 	}
 
 }

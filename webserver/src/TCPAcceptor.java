@@ -1,19 +1,19 @@
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 
 
-import lsr.concurrence.http.HttpRequestStream;
+
 
 
 public class TCPAcceptor implements Runnable {
 
 	private ServerSocket serverSocket;
-
-	public TCPAcceptor(ServerSocket serverSocket) {
+	private BufferOfTasks buffer;
+	public TCPAcceptor(ServerSocket serverSocket,BufferOfTasks buffer) {
 		this.serverSocket = serverSocket;
+		this.buffer = buffer;
 	}
 
 	public ServerSocket getServerSocket() {
@@ -24,19 +24,27 @@ public class TCPAcceptor implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
+		
+		// creat the buffer of size N
+		
+		// generate the N workers
+		
 		while(true){
 			Socket socket = null;
 			System.out.println("Nombre de boucle Socket = new socket");
 		try {
 			socket = serverSocket.accept();
-			InputStream is = socket.getInputStream();
-			OutputStream os = socket.getOutputStream();
+			//InputStream is = socket.getInputStream();
+			//OutputStream os = socket.getOutputStream();  // ces flux seront utiliser par les workers lorsqu'ils liront le socket dans le buffer
 	        System.out.println("New connection accepted "
 		            + socket.getInetAddress() + ":" + socket.getPort());
-	        Worker worker = new Worker(is,os);
-	        Thread thread = new Thread(worker);
-			thread.start();
-			worker.setAvailable(true);
+	        //Put the socket into the buffer
+	        Task task = new Task(socket);
+	        buffer.putIntoBuffer(task);
+//	        Worker worker = new Worker(buffer);
+//	        Thread thread = new Thread(worker);
+//			thread.start();
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

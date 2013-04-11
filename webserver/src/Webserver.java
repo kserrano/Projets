@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
 
 
 public class Webserver {
@@ -11,6 +10,7 @@ public class Webserver {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		int port = 8080;
+		final int BUFFER_SIZE = 5;
 		ServerSocket serverSocket = null;
 		try {
 			serverSocket = new ServerSocket(port);
@@ -19,8 +19,8 @@ public class Webserver {
 			e.printStackTrace();
 		}
 		System.out.println("httpServer running on port " + serverSocket.getLocalPort());
-		
-		TCPAcceptor TCPa = new TCPAcceptor(serverSocket);
+		BufferOfTasks buffer = new BufferOfTasks(BUFFER_SIZE);
+		TCPAcceptor TCPa = new TCPAcceptor(serverSocket,buffer);
 		TCPa.run();
 	}
 

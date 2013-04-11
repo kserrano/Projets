@@ -33,9 +33,9 @@ public class TCPAcceptor implements Runnable {
 			OutputStream os = socket.getOutputStream();
 	        System.out.println("New connection accepted "
 		            + socket.getInetAddress() + ":" + socket.getPort());
-
-			Worker worker = new Worker(is,os);
-			worker.start();
+	        Worker worker = new Worker(is,os);
+	        Thread thread = new Thread(worker);
+			thread.start();
 			worker.setAvailable(true);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -13,7 +13,7 @@ import lsr.concurrence.http.HttpResponseStream;
 import lsr.concurrence.webserver.StaticSite;
 
 
-public class Worker extends Thread{
+public class Worker implements Runnable{
 	InputStream is;
 	OutputStream os;
 	Boolean available = true;
@@ -33,7 +33,7 @@ public class Worker extends Thread{
 	/* (non-Javadoc)
 	 * @see java.lang.Thread#start()
 	 */
-	public void start(){
+	public void run(){
 		HttpRequestStream requestStream = new HttpRequestStream(is);
 		HttpResponseStream responseStream = new HttpResponseStream(is);
 		System.out.println("Worker started");

@@ -47,7 +47,7 @@ public void run(){
 		
 		// Step 2: generate a matching response
 		StaticSite staticS = new StaticSite();
-System.out.println("staticSite created");
+		System.out.println("staticSite created");
 			HttpResponse response = staticS.respondTo(request);
 			System.out.println("response");
 			

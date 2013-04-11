@@ -37,22 +37,17 @@ public class BufferOfTasks {
 			return false;
 		}
 	}
-	// rendre ces deux methodes blocantes (semaphores)
 	public void putIntoBuffer(Task t){
-		System.out.println("Start deposit");
+
 		try {
 			availableSpaces.acquire();
-//			mutex.acquire();
-			//insert(t);
+			System.out.println("Start deposit");
 			tasks[putPosition]=t;
 			putPosition = (putPosition+1)% bufferSize;
 			mutex.acquire();
 			nbItemIntoBuffer++;
 			mutex.release();
-			//tasks[putPosition] = t;
-			//putPosition = putPosition+1;
 			availableItems.release();
-//			mutex.release();
 			System.out.println("End deposit");
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -63,12 +58,10 @@ public class BufferOfTasks {
 	
 	public Task readTask(){
 		Task t=null;
-		System.out.println("begin readTask");
+
 		try {
 			availableItems.acquire();
-//			mutex.acquire();
-//			t = getNextTask();
-//			mutex.release();
+			System.out.println("begin readTask");
 			t = tasks[getPosition];
 			getPosition = (getPosition+1)% bufferSize;
 			mutex.acquire();

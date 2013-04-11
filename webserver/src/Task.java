@@ -38,7 +38,8 @@ public void run(){
 	HttpRequestStream requestStream = new HttpRequestStream(is);
 	HttpResponseStream responseStream = new HttpResponseStream(is); // check here for Response Stream
 	System.out.println("Worker started to process");
-	while(true)
+	boolean closeconnection = false;
+	while(!closeconnection)
 	//Step 1 : read a request
 	try {
 		HttpRequest request = requestStream.readRequest();
@@ -46,21 +47,24 @@ public void run(){
 		
 		// Step 2: generate a matching response
 		StaticSite staticS = new StaticSite();
-
-		try {
+System.out.println("staticSite created");
 			HttpResponse response = staticS.respondTo(request);
+			System.out.println("response");
+			
 			// Step 3 : write the response into the socket
 			PrintWriter printOut = new PrintWriter(os, true);
 	        printOut.write(response.toString());
+	        System.out.println(response.toString());
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		
 		
 
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
-		e.printStackTrace();
+		closeconnection = true;
+		//e.printStackTrace();
 	}
 }
 

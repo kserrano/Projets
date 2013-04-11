@@ -25,9 +25,6 @@ public class TCPAcceptor implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		
-		// creat the buffer of size N
-		
-		// generate the N workers
 		
 		while(true){
 			Socket socket = null;
@@ -38,7 +35,7 @@ public class TCPAcceptor implements Runnable {
 			//OutputStream os = socket.getOutputStream();  // ces flux seront utiliser par les workers lorsqu'ils liront le socket dans le buffer
 	        System.out.println("New connection accepted "
 		            + socket.getInetAddress() + ":" + socket.getPort());
-	        //Put the socket into the buffer
+	        //Put the task into the buffer
 	        Task task = new Task(socket);
 	        buffer.putIntoBuffer(task);
 //	        Worker worker = new Worker(buffer);

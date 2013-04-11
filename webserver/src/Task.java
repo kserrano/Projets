@@ -1,4 +1,4 @@
-import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,8 +15,18 @@ import lsr.concurrence.webserver.StaticSite;
 
 public class Task {
 	private Socket s;
+	private InputStream is;
+	private OutputStream os;
 	public Task(Socket s){
 		this.s = s;
+		try {
+			this.is = s.getInputStream();
+			this.os = s.getOutputStream();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public Socket getSocket(){
@@ -24,18 +34,7 @@ public class Task {
 	}
 
 public void run(){
-	Socket socket  = this.getSocket();
-	InputStream is = null;		
 
-	OutputStream os = null;
-
-	try {
-		is = socket.getInputStream();
-		os = socket.getOutputStream();
-	} catch (IOException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	}
 	HttpRequestStream requestStream = new HttpRequestStream(is);
 	HttpResponseStream responseStream = new HttpResponseStream(is); // check here for Response Stream
 	System.out.println("Worker started to process");

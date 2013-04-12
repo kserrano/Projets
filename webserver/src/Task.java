@@ -2,6 +2,7 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.URISyntaxException;
@@ -33,39 +34,39 @@ public class Task {
 		return s;
 	}
 
-public void run(){
+	public void run(){
 
-	HttpRequestStream requestStream = new HttpRequestStream(is);
-	HttpResponseStream responseStream = new HttpResponseStream(is); // check here for Response Stream
-	System.out.println("Worker started to process");
-	boolean closeconnection = false;
-	while(!closeconnection)
-	//Step 1 : read a request
-	try {
-		HttpRequest request = requestStream.readRequest();
-		System.out.println("Read request");
-		
-		// Step 2: generate a matching response
-		StaticSite staticS = new StaticSite();
-		System.out.println("staticSite created");
+		HttpRequestStream requestStream = new HttpRequestStream(is);
+	    PrintStream writer = new PrintStream(os);
+		System.out.println("Worker started to process");
+		boolean closeconnection = false;
+		while(!closeconnection)
+		//Step 1 : read a request
+		try {
+			HttpRequest request = requestStream.readRequest();
+			System.out.println("Read request");
+			
+			// Step 2: generate a matching response
+			StaticSite staticS = new StaticSite();
+			System.out.println("staticSite created");
 			HttpResponse response = staticS.respondTo(request);
 			System.out.println("response");
 			
-			// Step 3 : write the response into the socket
-			PrintWriter printOut = new PrintWriter(os, true);
-	        printOut.write(response.toString());
+			response.writeTo(writer);
 	        System.out.println(response.toString());
+		        
+		       
 		} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			
+			
+	
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		
-		
-
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		closeconnection = true;
-		//e.printStackTrace();
+			closeconnection = true;
+			//e.printStackTrace();
+		}
 	}
-}
 
 }

@@ -1,4 +1,4 @@
-package webserverStage3;
+
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -25,7 +25,7 @@ public class WebserverStage3 {
 
 			for(int i = 0; i<WORKER_SIZE;i++){
 				Thread t = new Thread(new WorkerRead(buffer1,buffer2));
-				Thread t2 = new Thread(new Worker(buffer2));
+				Thread t2 = new Thread(new WorkerProcess(buffer2));
 				System.out.println("Workers "+ (i+1) +" created");
 				t.start();
 				t2.start();

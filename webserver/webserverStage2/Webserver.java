@@ -23,7 +23,7 @@ public class Webserver {
 		//Creat buffer of size N
 		BufferOfTasks buffer = new BufferOfTasks(BUFFER_SIZE);
 		//Creat M workers
-		Worker[] workers = new Worker[WORKER_SIZE];
+
 		for(int i = 0; i<WORKER_SIZE;i++){
 			Thread t = new Thread(new Worker(buffer));
 			System.out.println("Worker "+ (i+1) +" created");

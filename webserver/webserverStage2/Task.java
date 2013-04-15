@@ -18,8 +18,10 @@ public class Task {
 	private Socket s;
 	private InputStream is;
 	private OutputStream os;
-	public Task(Socket s){
+	private HttpRequest r;
+	public Task(Socket s,HttpRequest r){
 		this.s = s;
+		this.r = r;
 		try {
 			this.is = s.getInputStream();
 			this.os = s.getOutputStream();
@@ -32,6 +34,9 @@ public class Task {
 	
 	public Socket getSocket(){
 		return s;
+	}
+	public HttpRequest getRequest(){
+		return r;
 	}
 
 	public void run(){

@@ -36,7 +36,7 @@ public class TCPAcceptor extends Thread {
 	        System.out.println("New connection accepted "
 		            + socket.getInetAddress() + ":" + socket.getPort());
 	        //Put the task into the buffer
-	        Task task = new Task(socket);
+	        Task task = new Task(socket,null);
 	        buffer.putIntoBuffer(task);
 	        System.out.println("Put task into buffer");
 	       // System.out.println("buffer full?"+buffer.isFull());

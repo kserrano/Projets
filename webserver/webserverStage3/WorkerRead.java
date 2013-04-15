@@ -1,4 +1,3 @@
-package webserverStage3;
 
 public class WorkerRead implements Runnable{
 	
@@ -17,7 +16,8 @@ public class WorkerRead implements Runnable{
 	public void run(){
 		System.out.println("workerRead run");
 		while(true){
-				Task1 task1 = (Task1) buffer1.readTask();
+				Task task = buffer1.readTask();
+				Task1 task1 = new Task1(task.getSocket(),null,buffer2);
 				task1.run();
 		}
 	}

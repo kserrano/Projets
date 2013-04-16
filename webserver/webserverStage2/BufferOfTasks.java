@@ -8,8 +8,6 @@ public class BufferOfTasks<T> {
 	private final Semaphore availableSpaces;
 	private final Semaphore availableItems;
 	//private final Semaphore mutex;
-
-	private int nbItemIntoBuffer = 0;
 	private LinkedList<T> tasks;
 
 	public BufferOfTasks(int bufferSize) {
@@ -17,7 +15,7 @@ public class BufferOfTasks<T> {
 		availableItems = new Semaphore(0, true);
 		availableSpaces = new Semaphore(bufferSize, true);
 		//mutex = new Semaphore(1, true);
-		tasks = new LinkedList<>();
+		tasks = new LinkedList<T>();
 	}
 
 	public int getBufferSize() {
@@ -52,7 +50,6 @@ public class BufferOfTasks<T> {
 			availableItems.release();
 			System.out.println("End deposit");
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -71,7 +68,6 @@ public class BufferOfTasks<T> {
 			availableSpaces.release();
 			System.out.println("end readTask");
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return t;

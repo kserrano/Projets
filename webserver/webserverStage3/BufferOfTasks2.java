@@ -63,8 +63,9 @@ public class BufferOfTasks2<T> {
 
 		try {
 			availableItems.acquire();
-			System.out.println("begin readTask");
 			t = tasks.getFirst();
+			tasks.removeFirst();
+			System.out.println("begin readTask");
 			mutex.acquire();
 			nbItemIntoBuffer--;
 			mutex.release();

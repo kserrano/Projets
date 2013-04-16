@@ -17,7 +17,7 @@ public class BufferOfTasks2<T> {
 		availableItems = new Semaphore(0, true);
 		availableSpaces = new Semaphore(bufferSize, true);
 		mutex = new Semaphore(1, true);
-		tasks = new LinkedList<>();
+		tasks = new LinkedList<T>();
 	}
 
 	public int getBufferSize() {

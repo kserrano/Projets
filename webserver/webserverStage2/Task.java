@@ -3,14 +3,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.PrintWriter;
+
 import java.net.Socket;
 import java.net.URISyntaxException;
 
 import lsr.concurrence.http.HttpRequest;
 import lsr.concurrence.http.HttpRequestStream;
 import lsr.concurrence.http.HttpResponse;
-import lsr.concurrence.http.HttpResponseStream;
 import lsr.concurrence.webserver.StaticSite;
 
 
@@ -18,10 +17,9 @@ public class Task {
 	private Socket s;
 	private InputStream is;
 	private OutputStream os;
-	private HttpRequest r;
-	public Task(Socket s,HttpRequest r){
+
+	public Task(Socket s){
 		this.s = s;
-		this.r = r;
 		try {
 			this.is = s.getInputStream();
 			this.os = s.getOutputStream();
@@ -35,9 +33,7 @@ public class Task {
 	public Socket getSocket(){
 		return s;
 	}
-	public HttpRequest getRequest(){
-		return r;
-	}
+
 
 	public void run(){
 

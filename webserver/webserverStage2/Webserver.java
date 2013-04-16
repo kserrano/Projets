@@ -21,7 +21,7 @@ public class Webserver {
 		}
 		System.out.println("httpServer running on port " + serverSocket.getLocalPort());
 		//Creat buffer of size N
-		BufferOfTasks buffer = new BufferOfTasks(BUFFER_SIZE);
+		BufferOfTasks<Task> buffer = new BufferOfTasks<Task>(BUFFER_SIZE);
 		//Creat M workers
 
 		for(int i = 0; i<WORKER_SIZE;i++){

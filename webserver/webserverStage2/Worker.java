@@ -1,10 +1,10 @@
 
 public class Worker implements Runnable{
 	
-	BufferOfTasks buffer;
+	BufferOfTasks<Task> buffer;
 
 
-	public Worker(BufferOfTasks buffer) {
+	public Worker(BufferOfTasks<Task> buffer) {
 		this.buffer = buffer;
 	
 	} 	

@@ -10,8 +10,8 @@ import java.net.Socket;
 public class TCPAcceptor extends Thread {
 
 	private ServerSocket serverSocket;
-	private BufferOfTasks buffer;
-	public TCPAcceptor(ServerSocket serverSocket,BufferOfTasks buffer) {
+	private BufferOfTasks<Task> buffer;
+	public TCPAcceptor(ServerSocket serverSocket,BufferOfTasks<Task> buffer) {
 		this.serverSocket = serverSocket;
 		this.buffer = buffer;
 	}
@@ -29,14 +29,14 @@ public class TCPAcceptor extends Thread {
 		while(true){
 			
 			Socket socket = null;
-			System.out.println("Nombre de boucle Socket = new socket");
+
 		try {
 			socket = serverSocket.accept();
 			
 	        System.out.println("New connection accepted "
 		            + socket.getInetAddress() + ":" + socket.getPort());
 	        //Put the task into the buffer
-	        Task task = new Task(socket,null);
+	        Task task = new Task(socket);
 	        buffer.putIntoBuffer(task);
 	        System.out.println("Put task into buffer");
 	       // System.out.println("buffer full?"+buffer.isFull());

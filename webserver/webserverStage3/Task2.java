@@ -14,62 +14,59 @@ import lsr.concurrence.http.HttpResponse;
 import lsr.concurrence.webserver.StaticSite;
 
 
-public class Task2 extends Task {
+public class Task2  {
 	private Socket s;
 	private InputStream is;
 	private OutputStream os;
 	private HttpRequest r;
-	public Task2(Socket s,HttpRequest r){
-		super(s,r);
-		
+	private Counter c;
+	private int k;
+	public Task2(Socket s,HttpRequest r,Counter c,int k){
+		this.s = s;
+		this.r = r;
+		try {
+			this.os=s.getOutputStream();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.c=c;
+		this.k = k;
 	}
 	
 
-	public void run(){
+	public synchronized void  run(){
 	    PrintStream writer = new PrintStream(os);
 		System.out.println("Worker started to process");
 		boolean closeconnection = false;
-		while(!closeconnection)
-		//Step 1 : read a request
-		try {
-			// recuperation de la requete
-			HttpRequest request = this.getRequest();
-			
+		while(!closeconnection){
+
 			// Step 2: generate a matching response
 			// Need to be synchronized (using monitor)
 			
-		    HttpResponse response = creatResponse(request);
-			response.writeTo(writer);
-	        System.out.println(response.toString()); 
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			closeconnection = true;
-			//e.printStackTrace();
-		}
-	}
-	public HttpResponse creatResponse(HttpRequest r){
-		StaticSite staticS;
-		HttpResponse response = null;
-		try {
-			staticS = new StaticSite();
-			System.out.println("staticSite created");
-			response = staticS.respondTo(r);
-			System.out.println("response");
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
+			try {
+				StaticSite staticS = new StaticSite();
+				System.out.println("staticSite created");
+				HttpResponse response = staticS.respondTo(r);
+				System.out.println("response");
+				response.writeTo(writer);
+				c.increment();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				
+				e.printStackTrace();
+				
+			}
 			
-			e.printStackTrace();
-			
-		}
-		return response;
-
-		
+	        System.out.println(r.toString()); 
 
 	}
+	}
+
+	
 
 
 }

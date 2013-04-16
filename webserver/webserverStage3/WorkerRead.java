@@ -1,14 +1,14 @@
 
 public class WorkerRead implements Runnable{
 	
-	BufferOfTasks buffer1;
-	BufferOfTasks buffer2;
+	BufferOfTasks2<Task1> buffer1;
+
 	
 
 	
-	public WorkerRead(BufferOfTasks buffer1,BufferOfTasks buffer2) {
+	public WorkerRead(BufferOfTasks2<Task1> buffer1) {
 		this.buffer1 = buffer1;
-		this.buffer2 = buffer2;
+
 
 	} 	
 	
@@ -16,9 +16,8 @@ public class WorkerRead implements Runnable{
 	public void run(){
 		System.out.println("workerRead run");
 		while(true){
-				Task task = buffer1.readTask();
-				Task1 task1 = new Task1(task.getSocket(),null,buffer2);
-				task1.run();
+				Task1 t1 = buffer1.readTask();
+				t1.run();
 		}
 	}
 	

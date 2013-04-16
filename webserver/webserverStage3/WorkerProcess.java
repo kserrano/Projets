@@ -1,9 +1,9 @@
 
 
 public class WorkerProcess implements Runnable {
-	private BufferOfTasks buffer2;
+	private BufferOfTasks2<Task2> buffer2;
 	//Need the BlockingCounter
-	public WorkerProcess(BufferOfTasks buffer2){
+	public WorkerProcess(BufferOfTasks2<Task2> buffer2){
 		this.buffer2 = buffer2;
 	}
 	@Override
@@ -11,8 +11,7 @@ public class WorkerProcess implements Runnable {
 		// TODO Auto-generated method stub
 		System.out.println("WorkerProcess run");
 		while(true){
-			Task t = buffer2.readTask();
-			Task2 t2 =  new Task2(t.getSocket(),t.getRequest());
+			Task2 t2 = buffer2.readTask();
 			t2.run();
 		}
 	}

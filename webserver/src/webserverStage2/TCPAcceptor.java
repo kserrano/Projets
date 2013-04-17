@@ -9,20 +9,42 @@ import java.net.Socket;
 
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TCPAcceptor.
+ */
 public class TCPAcceptor extends Thread {
 
+	/** The server socket. */
 	private ServerSocket serverSocket;
+	
+	/** The buffer. */
 	private BufferOfTasks<Task> buffer;
+	
+	/**
+	 * Instantiates a new tCP acceptor.
+	 *
+	 * @param serverSocket the server socket
+	 * @param buffer the buffer
+	 */
 	public TCPAcceptor(ServerSocket serverSocket,BufferOfTasks<Task> buffer) {
 		this.serverSocket = serverSocket;
 		this.buffer = buffer;
 	}
 
+	/**
+	 * Gets the server socket.
+	 *
+	 * @return the server socket
+	 */
 	public ServerSocket getServerSocket() {
 		return serverSocket;
 	}
 
 
+	/* (non-Javadoc)
+	 * @see java.lang.Thread#start()
+	 */
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
@@ -40,8 +62,7 @@ public class TCPAcceptor extends Thread {
 	        //Put the task into the buffer
 	        Task task = new Task(socket);
 	        buffer.putIntoBuffer(task);
-	        System.out.println("Put task into buffer");
-	       // System.out.println("buffer full?"+buffer.isFull());
+
 
 
 		} catch (IOException e) {

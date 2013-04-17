@@ -4,16 +4,35 @@ package webserverStage3f;
 import java.util.LinkedList;
 import java.util.concurrent.Semaphore;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class BufferOfTasks.
+ *
+ * @param <T> the generic type
+ */
 public class BufferOfTasks2<T> {
 
+	/** The buffer size. */
 	private final int bufferSize;
+	
+	/** The available spaces. */
 	private final Semaphore availableSpaces;
+	
+	/** The available items. */
 	private final Semaphore availableItems;
+	
+	/** The mutex. */
 	private final Semaphore mutex;
 
-	private int nbItemIntoBuffer = 0;
+
+	/** The tasks. */
 	private LinkedList<T> tasks;
 
+	/**
+	 * Instantiates a new buffer of tasks.
+	 *
+	 * @param bufferSize the buffer size
+	 */
 	public BufferOfTasks2(int bufferSize) {
 		this.bufferSize = bufferSize;
 		availableItems = new Semaphore(0, true);
@@ -22,10 +41,20 @@ public class BufferOfTasks2<T> {
 		tasks = new LinkedList<T>();
 	}
 
+	/**
+	 * Gets the buffer size.
+	 *
+	 * @return the buffer size
+	 */
 	public int getBufferSize() {
 		return bufferSize;
 	}
 
+	/**
+	 * Checks if is empty.
+	 *
+	 * @return true, if is empty
+	 */
 	public boolean isEmpty() {
 		if (availableItems.availablePermits() == 0) {
 			return true;
@@ -34,6 +63,11 @@ public class BufferOfTasks2<T> {
 		}
 	}
 
+	/**
+	 * Checks if is full.
+	 *
+	 * @return true, if is full
+	 */
 	public boolean isFull() {
 		if (availableSpaces.availablePermits() == 0) {
 			return true;
@@ -42,39 +76,47 @@ public class BufferOfTasks2<T> {
 		}
 	}
 
+	/**
+	 * Put into buffer.
+	 *
+	 * @param t the t
+	 */
 	public void putIntoBuffer(T t) {
 
 		try {
 			availableSpaces.acquire();
-			System.out.println("Start deposit");
-			tasks.add(t);
+
 			mutex.acquire();
-			nbItemIntoBuffer++;
+			tasks.add(t);
 			mutex.release();
+			
 			availableItems.release();
-			System.out.println("End deposit");
+
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
 
+	/**
+	 * Read task.
+	 *
+	 * @return the t
+	 */
 	public T readTask() {
 		T t = null;
 
 		try {
 			availableItems.acquire();
+
+			mutex.acquire();
 			t = tasks.getFirst();
 			tasks.removeFirst();
-			System.out.println("begin readTask");
-			mutex.acquire();
-			nbItemIntoBuffer--;
 			mutex.release();
+			
 			availableSpaces.release();
 			System.out.println("end readTask");
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return t;

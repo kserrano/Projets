@@ -5,8 +5,17 @@ package webserverStage3f;
 import java.io.IOException;
 import java.net.ServerSocket;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class WebserverStage3.
+ */
 public class WebserverStage3 {
 
+		/**
+		 * The main method.
+		 *
+		 * @param args the arguments
+		 */
 		public static void main(String[] args) {
 			// TODO Auto-generated method stub
 			int port = 8080;
@@ -28,10 +37,9 @@ public class WebserverStage3 {
 			for(int i = 0; i<WORKER_SIZE;i++){
 				Thread t = new Thread(new WorkerRead(buffer1));
 				Thread t2 = new Thread(new WorkerProcess(buffer2));
-				System.out.println("Workers "+ (i+1) +" created");
 				t.start();
 				t2.start();
-				System.out.println("Workers "+(i+1)+" running");
+
 			}
 			
 			TCPAcceptor2 TCPa = new TCPAcceptor2(serverSocket,buffer1,buffer2);

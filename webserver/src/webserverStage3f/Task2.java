@@ -9,19 +9,43 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 
 import lsr.concurrence.http.HttpRequest;
-import lsr.concurrence.http.HttpRequestStream;
+
 import lsr.concurrence.http.HttpResponse;
 
 import lsr.concurrence.webserver.StaticSite;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Task2.
+ */
 public class Task2 {
+	
+	/** The s. */
 	private Socket s;
+	
+	/** The is. */
 	private InputStream is;
+	
+	/** The os. */
 	private OutputStream os;
+	
+	/** The r. */
 	private HttpRequest r;
+	
+	/** The c. */
 	private Counter c;
+	
+	/** The k. */
 	private int k;
 
+	/**
+	 * Instantiates a new task2.
+	 *
+	 * @param s the s
+	 * @param r the r
+	 * @param c the c
+	 * @param k the k
+	 */
 	public Task2(Socket s, HttpRequest r, Counter c, int k) {
 		this.s = s;
 		this.r = r;
@@ -35,18 +59,21 @@ public class Task2 {
 		this.k = k;
 	}
 
+	/**
+	 * Run.
+	 */
 	public void run() {
 		PrintStream writer = new PrintStream(os);
-		System.out.println("Worker started to process");
+
 
 		// Step 2: generate a matching response
-		// Need to be synchronized (using monitor)
+
 
 		try {
 			StaticSite staticS = new StaticSite();
-			System.out.println("staticSite created");
+
 			HttpResponse response = staticS.respondTo(r);
-			System.out.println("response");
+
 			c.await(k); 
 			response.writeTo(writer);
 			c.increment();
@@ -61,7 +88,6 @@ public class Task2 {
 
 		}
 
-		System.out.println(r.toString());
 
 	}
 

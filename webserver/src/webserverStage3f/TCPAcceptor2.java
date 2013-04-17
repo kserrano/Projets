@@ -9,22 +9,47 @@ import java.net.Socket;
 
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TCPAcceptor2.
+ */
 public class TCPAcceptor2 extends Thread {
 
+	/** The server socket. */
 	private ServerSocket serverSocket;
+	
+	/** The buffer1. */
 	private BufferOfTasks2<Task1> buffer1;
+	
+	/** The buffer2. */
 	private BufferOfTasks2<Task2> buffer2;
+	
+	/**
+	 * Instantiates a new tCP acceptor2.
+	 *
+	 * @param serverSocket the server socket
+	 * @param buffer1 the buffer1
+	 * @param buffer2 the buffer2
+	 */
 	public TCPAcceptor2(ServerSocket serverSocket,BufferOfTasks2<Task1>buffer1, BufferOfTasks2<Task2>buffer2) {
 		this.serverSocket = serverSocket;
 		this.buffer1 = buffer1;
 		this.buffer2 = buffer2;
 	}
 
+	/**
+	 * Gets the server socket.
+	 *
+	 * @return the server socket
+	 */
 	public ServerSocket getServerSocket() {
 		return serverSocket;
 	}
 
 
+	/* (non-Javadoc)
+	 * @see java.lang.Thread#start()
+	 */
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
@@ -33,7 +58,7 @@ public class TCPAcceptor2 extends Thread {
 		while(true){
 			
 			Socket socket = null;
-			System.out.println("Nombre de boucle Socket = new socket");
+
 		try {
 			socket = serverSocket.accept();
 			
@@ -42,7 +67,7 @@ public class TCPAcceptor2 extends Thread {
 	        //Put the task into the buffer
 	        Task1 task1 = new Task1(socket,buffer2);
 	        buffer1.putIntoBuffer(task1);
-	        System.out.println("Put task into buffer");
+
 
 
 

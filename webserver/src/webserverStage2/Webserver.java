@@ -4,10 +4,16 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Webserver.
+ */
 public class Webserver {
 
 	/**
-	 * @param args
+	 * The main method.
+	 *
+	 * @param args the arguments
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -28,9 +34,7 @@ public class Webserver {
 
 		for(int i = 0; i<WORKER_SIZE;i++){
 			Thread t = new Thread(new Worker(buffer));
-			System.out.println("Worker "+ (i+1) +" created");
 			t.start();
-			System.out.println("Worker "+(i+1)+" running");
 		}
 		
 		TCPAcceptor TCPa = new TCPAcceptor(serverSocket,buffer);

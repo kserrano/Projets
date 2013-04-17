@@ -1,14 +1,14 @@
 
 public class Counter implements BlockingCounter{
 	int value;
-	
-	public Counter(int value){
-		this.value = value;
-	}
+public Counter() {
+	// TODO Auto-generated constructor stub
+	this.value = 0;
+}	
 	@Override
 	public synchronized void await(int number)  {
 		// TODO Auto-generated method stub
-		while(!(value > number)){
+		while(value != number){
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -21,7 +21,7 @@ public class Counter implements BlockingCounter{
 	@Override
 	public synchronized void increment() {
 		// TODO Auto-generated method stub
-		this.value++;
+		value++;
 		notifyAll();
 	}
 

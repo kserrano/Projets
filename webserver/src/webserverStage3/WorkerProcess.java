@@ -12,6 +12,7 @@ public class WorkerProcess implements Runnable {
 		System.out.println("WorkerProcess run");
 		while(true){
 			Task2 t2 = buffer2.readTask();
+			System.err.println("Task2 read");
 			t2.run();
 		}
 	}

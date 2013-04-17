@@ -27,32 +27,36 @@ public class Task1 {
 	}
 
 	public void run() {
-		readRequests();
-	}
-
-	public void readRequests() {
+		try {
 		HttpRequestStream requestStream = new HttpRequestStream(is);
 		int k = 0;
-		boolean closeconnection = false;
-		while (!closeconnection) {
+
+		Counter counter = new Counter();
+		while (true) {
 			// Step 1 : read a request
-			try {
+			
 				HttpRequest request = requestStream.readRequest();
 				System.out.println("Read request");
-				Counter counter = new Counter(1);
+				
 				// put the Request into the buffer2 for process...
-				Task2 task2 = new Task2(s, request, counter,k++); 
+				Task2 task2 = new Task2(s, request, counter,k); 
 				System.out.println("K = "+k);
 				// pipeline (3ligne) + BlockingCouter
 
 				buffer2.putIntoBuffer(task2);
-				counter.await(k); // ???
+				k++;
+		}
+				// ???
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				closeconnection = true;
+
 				// e.printStackTrace();
 			}
 		}
+	
+
+	public void readRequests() {
+
 	}
 
 }

@@ -41,7 +41,7 @@ public class TCPAcceptor2 extends Thread {
 	        Task1 task1 = new Task1(socket,buffer2);
 	        buffer1.putIntoBuffer(task1);
 	        System.out.println("Put task into buffer");
-	       // System.out.println("buffer full?"+buffer.isFull());
+
 
 
 		} catch (IOException e) {

@@ -33,7 +33,7 @@ public class Task2 {
 		this.k = k;
 	}
 
-	public synchronized void run() {
+	public void run() {
 		PrintStream writer = new PrintStream(os);
 		System.out.println("Worker started to process");
 
@@ -45,6 +45,7 @@ public class Task2 {
 			System.out.println("staticSite created");
 			HttpResponse response = staticS.respondTo(r);
 			System.out.println("response");
+			c.await(k); 
 			response.writeTo(writer);
 			c.increment();
 		} catch (IOException e) {

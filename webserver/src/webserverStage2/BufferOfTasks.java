@@ -55,7 +55,6 @@ public class BufferOfTasks<T> {
 			availableItems.release();
 			System.out.println("End deposit");
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -77,7 +76,6 @@ public class BufferOfTasks<T> {
 			availableSpaces.release();
 			System.out.println("end readTask");
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return t;

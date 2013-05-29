@@ -67,7 +67,6 @@ public class Task {
 				// Step 1 : read a request
 
 				HttpRequest request = requestStream.readRequest();
-				System.out.println("Read request");
 
 				// Step 2: generate a matching response
 

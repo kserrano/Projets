@@ -26,7 +26,7 @@ public class Worker implements Runnable{
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run(){
-		System.out.println("worker run");
+
 		while(true){
 				Task task = buffer.readTask();
 				task.run();

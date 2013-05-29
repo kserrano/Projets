@@ -16,13 +16,19 @@ typedef struct {
     int priority;
 } ProcessDescriptor;
 
+
+// pour libre: 0 = libre, 1 = fermé
 typedef struct {
     int waitingList;
     int libre;
+    int id;
 } LockDescriptor;
 
 typedef struct {
-	int nextConditionID;
+	int conditionID;
+	int conditionWaitingList;
+	int verrouID;
+	int timeout;
 } Condition;
 
 
@@ -41,8 +47,6 @@ int nextProcessId = 0;
 Condition condition[MAXCONDITION];
 int nextConditionID = 0;
 
-// waitingList de conditions
-Condition conditionWaitingList[MAXCONDITION];
 
 // list of lock descriptors
 LockDescriptor locks[MAXLOCK];
@@ -147,15 +151,15 @@ void verrouiller(int verrouID){
     	locks[verrouID].libre = 1;
     }
     if (locks[verrouID].libre == 1){
-    	if (readyList1 > -1) {
-			int p = removeHead(&readyList1);
+    	if (readyList2 > -1) {
+			int p0 = removeHead(&readyList2);
+			addLast(&locks[verrouID].waitingList, p0);
+			Process process = processes[head(&readyList2)].p;
+			transfer(process);
+    	} else if (readyList1 > -1) {
+    		int p = removeHead(&readyList1);
 			addLast(&(locks[verrouID].waitingList), p);
 			Process process = processes[head(&readyList1)].p;
-			transfer(process);
-    	} else if (readyList2 > -1) {
-    		int p = removeHead(&readyList2);
-			addLast(&(locks[verrouID].waitingList), p);
-			Process process = processes[head(&readyList2)].p;
 			transfer(process);
     	}
     }
@@ -164,11 +168,11 @@ void verrouiller(int verrouID){
 void deverouiller(int verrouID){
     locks[verrouID].libre =  0;
 	int p =  removeHead(&(locks[verrouID].waitingList));
-	if(processes[p].priority==1){
-		addLast(&readyList1, p);
-	}
 	if(processes[p].priority==2){
 		addLast(&readyList2, p);
+	}
+	if(processes[p].priority==1){
+		addLast(&readyList1, p);
 	}
 	signal(condition[verrouID]);
 }
@@ -197,36 +201,50 @@ void start(){
 int creerVerrou() {
 	locks[nextLockID].libre = 0;
 	locks[nextLockID].waitingList = -1;
+	locks[nextLockID].id = nextLockID;
 	return nextLockID = nextLockID+1;
 }
 
 int creerCondition(int verrouID) {
-	condition[verrouID] = nextConditionID;
-	return nextConditionID = nextConditionID + 1;
+	Condition condition0;
+	condition0.conditionID = nextConditionID;
+	condition0.verrouID = verrouID;
+	condition.conditionWaitingList = -1;
+	condition[condition0.conditionID] = condition0;
+	nextConditionID++;
+	return condition0.conditionID;
 }
 
 void await(int conditionID) {
-	deverouiller(floor((conditionID-1)/2));
-	addFirst(* conditionWaitingList, conditionID);
+	deverouiller(locks[condition[conditionID].verrouID]);
+	int process = -1;
+	if (readyList2 > -1) {
+		process = removeHead(&readyList2);
+	}
+	else if (readyList1 > -1){
+		process = removeHead(&readyList1);
+	}
+	addLast(* condition[conditionID].conditionWaitingList, process);
 	if (readyList2 > -1) {
 		transfer(readyList2);
 	}
 	if (readyList1 > -1) {
 		transfer(readyList1);
 	}
-	verrouiller(floor((conditionID-1)/2));
+	verrouiller(condition[conditionID].verrouID);
 }
 
 void signal(int conditionID){
 	if (conditionID > -1) {
-		addLast(* locks[floor(conditionID /2)].waitingList , removeHead(conditionWaitingList));
+		addLast(* locks[condition[conditionID].verrouID].waitingList , removeHead(&condition[conditionID].conditionWaitingList));
 	}
 }
 
 void signalAll(int conditionID){
-	for(int i = 1; MAXCONDITION; i++) {
-		signal(i);
+	while (condition[conditionID].conditionWaitingList =! -1) {
+		addLast(* locks[condition[conditionID].verrouID].waitingList , removeHead(&condition[conditionID].conditionWaitingList));
 	}
+	verrouiller(condition[conditionID].verrouID);
 }
 
 int timedAwait(int conditionID, int time){

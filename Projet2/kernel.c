@@ -40,6 +40,8 @@ int nextProcessId = 0;
 // list of ConditionID
 Condition condition[MAXCONDITION];
 int nextConditionID = 0;
+int deadLine = 0;
+int byClock = 0;
 
 // waitingList de conditions
 Condition conditionWaitingList[MAXCONDITION];
@@ -49,6 +51,12 @@ LockDescriptor locks[MAXLOCK];
 int libre = 0;
 int nextLockID = 0;
 
+// process
+Process clockProcess = NULL;
+Process videProcess = NULL;
+
+//
+int currentTime=0;
 
 /***********************************************************
  ***********************************************************
@@ -173,6 +181,37 @@ void deverouiller(int verrouID){
 	signal(condition[verrouID]);
 }
 
+void clock(){
+	init_clock();
+	while(1){
+		Process process;
+		// si vide tourne dans le vide
+		// sinon prendre de la liste
+		if(theHead()==-1){
+			process = videProcess;
+	} else {
+		process = processes[theHead()].p;
+		}
+		iotransfer(process);
+
+		currentTime++;
+		int i =0;
+		for(i;i < nextConditionID;i++){
+			if(condition[i].deadLine > currentTime){
+				signal(i);
+				byClock = 1;
+			}
+		}
+	}
+
+}
+	int theHead(){
+		if(head(&readyList2) != -1){
+			return head(&readyList2);
+		}else{
+			return head(&readyList1);
+		}
+		}
 void start(){
 
     printf("Starting kernel...\n");
@@ -202,6 +241,8 @@ int creerVerrou() {
 
 int creerCondition(int verrouID) {
 	condition[verrouID] = nextConditionID;
+	deadLine = 0;
+	byClock = 0;
 	return nextConditionID = nextConditionID + 1;
 }
 
@@ -232,7 +273,21 @@ void signalAll(int conditionID){
 int timedAwait(int conditionID, int time){
 	if (time == 0) {
 		await(conditionID);
+	}else{
+		//set timeOut
+		condition[ConditionID].deadLine = time + currentTime;
+		await(conditionID)
+		if(condition[ConditionID].byClock){
+			allowInterrupts()
+				condition[ConditionID].byClock = 0;
+			return 0;
+		else {
+			allowInterrupts()
+			return 1;
+		}
+		}
 	}
+	return 1;
 }
 
 /*
